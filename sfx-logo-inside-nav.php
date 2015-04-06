@@ -275,28 +275,30 @@ final class SFX_Logo_Inside_Nav {
 	 */
 	public function slin_styles() {
 		wp_enqueue_style( 'slin-styles', plugins_url( '/assets/css/style.css', __FILE__ ) );
-
 		$css = '';
 		
 		//Hide header stuff if slin activated
 		$slin_option_true = get_theme_mod('slin_activation', false);
 		if($slin_option_true){
-			$css = '.site-header .site-branding, .site-header .site-logo-anchor, .site-header .site-logo-link{display:none;}'
-			  . '.woocommerce-active .site-header .main-navigation{'
-			  . 'width:100%;text-align:center;'
-			  . '}'
-			  . '.slin-logo-menu-item img{'
-			  . 'display: block; position: absolute; top: -999%; bottom: -999%; left: -999%; right: -999%; margin: auto;max-height:160px;'
-			  . '}'
-			  . '.slin-logo-menu-item span{'
-			  . 'font-size:2em;'
-			  . '}'
-			  . '.main-navigation ul.nav-menu > .slin-logo-menu-item.slin-logo-text a{'
-			  . '  padding: 0 1em; display: block; margin: -16px 0 0 0;'
-			  . '}'
-			  . '.slin-logo-menu-item.slin-logo-image{'
-			  . 'width:20%;font-size:0;'
-			  . '}';
+			$css = ''
+			  .'.site-header .site-branding, .site-header .site-logo-anchor, .site-header .site-logo-link{'
+					.'display:none;'
+			  .'}'
+			  .'.woocommerce-active .site-header .main-navigation, .site-header .main-navigation{'
+					.'width:100%;text-align:center;'
+			  .'}'
+			  .'.slin-logo-menu-item img{'
+					.'display: block; position: absolute; top: -999%; bottom: -999%; left: -999%; right: -999%; margin: auto;max-height:160px;'
+			  .'}'
+			  .'.slin-logo-menu-item span{'
+					.'font-size:2em;'
+			  .'}'
+			  .'.main-navigation ul.nav-menu > .slin-logo-menu-item.slin-logo-text a{'
+					.'  padding: 0 1em; display: block; margin: -16px 0 0 0;'
+			  .'}'
+			  .'.slin-logo-menu-item.slin-logo-image{'
+					.'width:20%;font-size:0;'
+			  .'}';
 		}
 
 		wp_add_inline_style( 'slin-styles', $css );
@@ -323,15 +325,28 @@ final class SFX_Logo_Inside_Nav {
 
 	function slin_logo_in_nav( $items, $args ){
 		$slin_option_true = get_theme_mod('slin_activation', false);
-		$li_class = 'slin-logo-text';
 		if(!$slin_option_true)			return $items;
 
+		//Fall back values
+		$li_class = 'slin-logo-text';
 		$logoHTML = '<a href="' . esc_url( home_url( '/' ) ) . '" rel="home"><span>' . get_bloginfo( 'name' ) . '</span></a>';
-		//From storefront-site-logo
+
+		//For Jetpack by WordPress.com
+		if ( function_exists( 'jetpack_has_site_logo' ) && jetpack_has_site_logo() ) {
+			$logo = site_logo()->logo;
+			$li_class = 'slin-logo-image';
+			$logoHTML = ''
+				. '<a class="slin-logo-anchor" href="' . esc_url( home_url( '/' ) ) . '" style="font-size:0px;" rel="home">'
+				. get_bloginfo( 'name' )
+				. '<img src="'. $logo['url']. '">'
+				. '</a>'
+			  . '';
+		}
+
+		//For Storefront Site Logo over-rides Jetpack
 		$check = get_theme_mod( 'woa_sf_enable_logo', 'title_tagline' );
 		$logo = get_theme_mod( 'woa_sf_logo', null );
-
-		if( ( $check == 'logo_img' ) && $logo ) {
+		if( ( ( $check == 'logo_img' ) && $logo ) ) {
 			if( is_ssl() ) {
 				$logo = str_replace( 'http://', 'https://', $logo );
 			}
@@ -342,9 +357,6 @@ final class SFX_Logo_Inside_Nav {
 				. '<img src="'. $logo. '">'
 				. '</a>'
 			  . '';
-		}
-		else if ( function_exists( 'jetpack_has_site_logo' ) && jetpack_has_site_logo() ) {
-			jetpack_the_site_logo();
 		}
 		
 		if($args->theme_location != 'primary')return $items;
