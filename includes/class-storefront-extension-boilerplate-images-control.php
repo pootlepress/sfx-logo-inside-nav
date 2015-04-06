@@ -2,7 +2,7 @@
 /**
  * Class to create a custom layout control
  */
-class Storefront_Extension_Boilerplate_Images_Control extends WP_Customize_Control {
+class SFX_Logo_Inside_Nav__Images_Control extends WP_Customize_Control {
 
 	public $type = 'radio';
 

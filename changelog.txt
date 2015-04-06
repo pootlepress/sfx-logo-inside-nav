@@ -1,4 +1,4 @@
-*** Storefront Extension Boilerplate Changelog ***
+*** SFX Logo Inside Nav Changelog ***
 
 xxxx.xx.xx - version 1.0.0
 * Initial release

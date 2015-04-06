@@ -1,9 +1,9 @@
-# Copyright (C) 2015 Storefront Extension Boilerplate
-# This file is distributed under the same license as the Storefront Extension Boilerplate package.
+# Copyright (C) 2015 SFX Logo Inside Nav
+# This file is distributed under the same license as the SFX Logo Inside Nav package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Storefront Extension Boilerplate 1.0.0\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/storefront-extension-boilerplate\n"
+"Project-Id-Version: SFX Logo Inside Nav 1.0.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/sfx-logo-inside-nav\n"
 "POT-Creation-Date: 2015-01-27 14:35:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,52 +12,52 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: storefront-extension-boilerplate.php:139
-#: storefront-extension-boilerplate.php:148
+#: sfx-logo-inside-nav.php:139
+#: sfx-logo-inside-nav.php:148
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:168
-msgid "%sThanks for installing the Storefront Extension Boilerplate extension. To get started, visit the %sCustomizer%s.%s %sOpen the Customizer%s"
+#: sfx-logo-inside-nav.php:168
+msgid "%sThanks for installing the SFX Logo Inside Nav extension. To get started, visit the %sCustomizer%s.%s %sOpen the Customizer%s"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:247
-msgid "Storefront Extension Boilerplate"
+#: sfx-logo-inside-nav.php:247
+msgid "SFX Logo Inside Nav"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:248
+#: sfx-logo-inside-nav.php:248
 msgid "Add a description, if you want to!"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:262
+#: sfx-logo-inside-nav.php:262
 msgid "Image selector"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:277
+#: sfx-logo-inside-nav.php:277
 msgid "Checkbox"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:278
+#: sfx-logo-inside-nav.php:278
 msgid "Here's a simple boolean checkbox option. In this instance it toggles wrapping the main navigation in a wrapper div."
 msgstr ""
 
-#: storefront-extension-boilerplate.php:295
+#: sfx-logo-inside-nav.php:295
 msgid "Color picker"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:296
+#: sfx-logo-inside-nav.php:296
 msgid "Here's an example color picker. In this instance it applies a background color to headings"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:311
+#: sfx-logo-inside-nav.php:311
 msgid "Select"
 msgstr ""
 
-#: storefront-extension-boilerplate.php:312
+#: sfx-logo-inside-nav.php:312
 msgid "Make a selection!"
 msgstr ""
 #. Plugin Name of the plugin/theme
-msgid "Storefront Extension Boilerplate"
+msgid "SFX Logo Inside Nav"
 msgstr ""
 
 #. Plugin URI of the plugin/theme

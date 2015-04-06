@@ -79,11 +79,11 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
-	"\/storefront-extension-boilerplate.php": {
+	"\/sfx-logo-inside-nav.php": {
 		"fileType": 8192,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/storefront-extension-boilerplate.php",
+		"inputAbbreviatedPath": "\/sfx-logo-inside-nav.php",
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
@@ -114,7 +114,7 @@
 	},
 "projectAttributes": {
 	"bowerAbbreviatedPath": "",
-	"displayValue": "storefront-extension-boilerplate",
+	"displayValue": "sfx-logo-inside-nav",
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "brackets_brown"
 	},
