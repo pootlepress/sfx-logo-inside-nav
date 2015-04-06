@@ -12,7 +12,7 @@
  * Text Domain: sfx-logo-inside-nav
  * Domain Path: /languages/
  *
- * @package SFX_Logo_Inside_Nav_
+ * @package SFX_Logo_Inside_Nav
  * @category Core
  * @author James Koster
  */
@@ -34,28 +34,28 @@ woothemes_queue_update( plugin_basename( __FILE__ ), 'FILE_ID', 'PRODUCT_ID' );
 // Sold On Woo - End
 
 /**
- * Returns the main instance of SFX_Logo_Inside_Nav_ to prevent the need to use globals.
+ * Returns the main instance of SFX_Logo_Inside_Nav to prevent the need to use globals.
  *
  * @since  1.0.0
- * @return object SFX_Logo_Inside_Nav_
+ * @return object SFX_Logo_Inside_Nav
  */
-function SFX_Logo_Inside_Nav_() {
-	return SFX_Logo_Inside_Nav_::instance();
-} // End SFX_Logo_Inside_Nav_()
+function SFX_Logo_Inside_Nav() {
+	return SFX_Logo_Inside_Nav::instance();
+} // End SFX_Logo_Inside_Nav()
 
-SFX_Logo_Inside_Nav_();
+SFX_Logo_Inside_Nav();
 
 /**
- * Main SFX_Logo_Inside_Nav_ Class
+ * Main SFX_Logo_Inside_Nav Class
  *
- * @class SFX_Logo_Inside_Nav_
+ * @class SFX_Logo_Inside_Nav
  * @version	1.0.0
  * @since 1.0.0
- * @package	SFX_Logo_Inside_Nav_
+ * @package	SFX_Logo_Inside_Nav
  */
-final class SFX_Logo_Inside_Nav_ {
+final class SFX_Logo_Inside_Nav {
 	/**
-	 * SFX_Logo_Inside_Nav_ The single instance of SFX_Logo_Inside_Nav_.
+	 * SFX_Logo_Inside_Nav The single instance of SFX_Logo_Inside_Nav.
 	 * @var 	object
 	 * @access  private
 	 * @since 	1.0.0
@@ -109,14 +109,14 @@ final class SFX_Logo_Inside_Nav_ {
 	}
 
 	/**
-	 * Main SFX_Logo_Inside_Nav_ Instance
+	 * Main SFX_Logo_Inside_Nav Instance
 	 *
-	 * Ensures only one instance of SFX_Logo_Inside_Nav_ is loaded or can be loaded.
+	 * Ensures only one instance of SFX_Logo_Inside_Nav is loaded or can be loaded.
 	 *
 	 * @since 1.0.0
 	 * @static
-	 * @see SFX_Logo_Inside_Nav_()
-	 * @return Main SFX_Logo_Inside_Nav_ instance
+	 * @see SFX_Logo_Inside_Nav()
+	 * @return Main SFX_Logo_Inside_Nav instance
 	 */
 	public static function instance() {
 		if ( is_null( self::$_instance ) )
@@ -213,8 +213,12 @@ final class SFX_Logo_Inside_Nav_ {
 			add_action( 'customize_register', array( $this, 'slin_customize_register' ) );
 			add_action( 'customize_preview_init', array( $this, 'slin_customize_preview_js' ) );
 			add_filter( 'body_class', array( $this, 'slin_body_class' ) );
-			add_action( 'wp', array( $this, 'slin_layout_adjustments' ), 999 );
 			add_action( 'admin_notices', array( $this, 'slin_customizer_notice' ) );
+
+			//Stuff that works
+			add_filter('wp_nav_menu_items', array( $this, 'slin_logo_in_nav' ) );
+			remove_action( 'storefront_header', 'storefront_site_branding' , 20 );
+
 
 			// Hide the 'More' section in the customizer
 			add_filter( 'storefront_customizer_more', '__return_false' );
@@ -245,110 +249,6 @@ final class SFX_Logo_Inside_Nav_ {
 	 * @param WP_Customize_Manager $wp_customize Theme Customizer object.
 	 */
 	public function slin_customize_register( $wp_customize ) {
-
-		/**
-		 * Custom controls
-		 * Load custom control classes
-		 */
-		require_once dirname( __FILE__ ) . '/includes/class-sfx-logo-inside-nav-images-control.php';
-
-		/**
-		 * Modify existing controls
-		 */
-		// Note: If you want to modiy existing controls, do it this way. You can set defaults, change the transport, etc.
-		//$wp_customize->get_setting( 'storefront_header_background_color' )->transport = 'refresh';
-
-		/**
-	     * Add a new section
-	     */
-        $wp_customize->add_section( 'slin_section' , array(
-		    'title'      	=> __( 'SFX Logo Inside Nav', 'storefront-extention-boilerplate' ),
-		    'description' 	=> __( 'Add a description, if you want to!', 'storefront-extention-boilerplate' ),
-		    'priority'   	=> 55,
-		) );
-
-		/**
-		 * Image selector radios
-		 * See class-control-images.php
-		 */
-		$wp_customize->add_setting( 'slin_image', array(
-			'default'    		=> 'option-1',
-			'sanitize_callback'	=> 'esc_attr'
-		) );
-
-		$wp_customize->add_control( new SFX_Logo_Inside_Nav__Images_Control( $wp_customize, 'slin_image', array(
-			'label'    => __( 'Image selector', 'storefront' ),
-			'section'  => 'slin_section',
-			'settings' => 'slin_image',
-			'priority' => 10,
-		) ) );
-
-		/**
-		 * Add a divider.
-		 * Type can be set to 'text' or 'heading' to display a title or description.
-		 */
-		if ( class_exists( 'Arbitrary_Storefront_Control' ) ) {
-			$wp_customize->add_control( new Arbitrary_Storefront_Control( $wp_customize, 'slin_divider', array(
-				'section'  	=> 'slin_section',
-				'type'		=> 'divider',
-				'priority' 	=> 15,
-			) ) );
-		}
-
-		/**
-		 * Checkbox
-		 */
-		$wp_customize->add_setting( 'slin_checkbox', array(
-			'default'			=> apply_filters( 'slin_checkbox_default', false ),
-			'sanitize_callback'	=> 'absint',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'slin_checkbox', array(
-			'label'			=> __( 'Checkbox', 'sfx-logo-inside-nav' ),
-			'description'	=> __( 'Here\'s a simple boolean checkbox option. In this instance it toggles wrapping the main navigation in a wrapper div.', 'sfx-logo-inside-nav' ),
-			'section'		=> 'slin_section',
-			'settings'		=> 'slin_checkbox',
-			'type'			=> 'checkbox',
-			'priority'		=> 20,
-		) ) );
-
-		/**
-		 * Color picker
-		 */
-		$wp_customize->add_setting( 'slin_color_picker', array(
-			'default'			=> apply_filters( 'slin_color_picker_default', '#ff0000' ),
-			'sanitize_callback'	=> 'sanitize_hex_color',
-			'transport'			=> 'postMessage', // Refreshes instantly via js. See customizer.js. (default = refresh).
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'slin_color_picker', array(
-			'label'			=> __( 'Color picker', 'sfx-logo-inside-nav' ),
-			'description'	=> __( 'Here\'s an example color picker. In this instance it applies a background color to headings', 'sfx-logo-inside-nav' ),
-			'section'		=> 'slin_section',
-			'settings'		=> 'slin_color_picker',
-			'priority'		=> 30,
-		) ) );
-
-		/**
-		 * Select
-		 */
-		$wp_customize->add_setting( 'slin_select', array(
-			'default' 			=> 'default',
-			'sanitize_callback'	=> 'storefront_sanitize_choices',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'slin_select', array(
-			'label'			=> __( 'Select', 'sfx-logo-inside-nav' ),
-			'description'	=> __( 'Make a selection!', 'sfx-logo-inside-nav' ),
-			'section'		=> 'slin_section',
-			'settings'		=> 'slin_select',
-			'type'			=> 'select', // To add a radio control, switch this to 'radio'.
-			'priority'		=> 40,
-			'choices'		=> array(
-				'default'		=> 'Default',
-				'non-default'	=> 'Non-default',
-			),
-		) ) );
 	}
 
 	/**
@@ -359,19 +259,9 @@ final class SFX_Logo_Inside_Nav_ {
 	public function slin_styles() {
 		wp_enqueue_style( 'slin-styles', plugins_url( '/assets/css/style.css', __FILE__ ) );
 
-		$heading_background_color 	= storefront_sanitize_hex_color( get_theme_mod( 'slin_color_picker', apply_filters( 'slin_default_heading_background_color', '#ff0000' ) ) );
+		$css = '';
 
-		$slin_style = '
-		h1,
-		h2,
-		h3,
-		h4,
-		h5,
-		h6 {
-			background-color: ' . $heading_background_color . ';
-		}';
-
-		wp_add_inline_style( 'slin-styles', $slin_style );
+		wp_add_inline_style( 'slin-styles', $css );
 	}
 
 	/**
@@ -393,33 +283,29 @@ final class SFX_Logo_Inside_Nav_ {
 		return $classes;
 	}
 
-	/**
-	 * Layout
-	 * Adjusts the default Storefront layout when the plugin is active
-	 */
-	public function slin_layout_adjustments() {
-		$slin_checkbox 	= get_theme_mod( 'slin_checkbox', apply_filters( 'slin_checkbox_default', false ) );
-
-		if ( true == $slin_checkbox ) {
-			add_action( 'storefront_header', array( $this, 'slin_primary_navigation_wrapper' ), 45 );
-			add_action( 'storefront_header', array( $this, 'slin_primary_navigation_wrapper_close' ), 65 );
+	function slin_logo_in_nav( $items ){
+		//Init return value
+		$html = '';
+		//Convert items html into SimpleXML Object
+		$items = new SimpleXMLElement( '<ul>' . $items . '</ul>' );
+		//Num of top level menu items
+		$num_items = count($items);
+		
+		$i = 0;
+		$logo_done = false;
+		foreach( $items as $item ){
+			$i++;
+			//If logo not done and $i > half the number of items
+			if( !$logo_done && $i > ($num_items/2)){
+				//Attach logo
+				$html .= '<li><a href="' . esc_url( home_url( '/' ) ) . '" rel="home">' . get_bloginfo( 'name' ) . '</a></li>';
+				//Set logo done to true
+				$logo_done = TRUE;
+			};
+			//Attach the menu item
+			$html .= $item->asXML();
 		}
-	}
-
-	/**
-	 * Primary navigation wrapper
-	 * @return void
-	 */
-	function slin_primary_navigation_wrapper() {
-		echo '<section class="slin-primary-navigation">';
-	}
-
-	/**
-	 * Primary navigation wrapper close
-	 * @return void
-	 */
-	function slin_primary_navigation_wrapper_close() {
-		echo '</section>';
+		return $html;
 	}
 
 } // End Class
