@@ -216,8 +216,11 @@ final class SFX_Logo_Inside_Nav {
 			add_action( 'admin_notices', array( $this, 'slin_customizer_notice' ) );
 
 			//Stuff that works
-			add_filter('wp_nav_menu_items', array( $this, 'slin_logo_in_nav' ) );
-			remove_action( 'storefront_header', 'storefront_site_branding' , 20 );
+			add_filter('wp_nav_menu_items', array( $this, 'slin_logo_in_nav' ), 10, 2 );
+			$slin_option_true = get_theme_mod('slin_activation', false);
+			if($slin_option_true){
+				remove_action( 'storefront_header', 'storefront_site_branding' , 20 );
+			}
 
 
 			// Hide the 'More' section in the customizer
@@ -249,6 +252,20 @@ final class SFX_Logo_Inside_Nav {
 	 * @param WP_Customize_Manager $wp_customize Theme Customizer object.
 	 */
 	public function slin_customize_register( $wp_customize ) {
+
+		$wp_customize->add_setting( 'slin_activation', array(
+			'default'			=> apply_filters( 'slin_activation_default', false ),
+			'sanitize_callback'	=> 'absint',
+		) );
+
+		$wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'slin_activation', array(
+			'label'			=> __( 'Center logo inside primary navigation', 'sfx-logo-inside-nav' ),
+			'section'		=> 'header_image',
+			'settings'		=> 'slin_activation',
+			'type'			=> 'checkbox',
+			'priority'		=> 99,
+		) ) );
+
 	}
 
 	/**
@@ -260,6 +277,27 @@ final class SFX_Logo_Inside_Nav {
 		wp_enqueue_style( 'slin-styles', plugins_url( '/assets/css/style.css', __FILE__ ) );
 
 		$css = '';
+		
+		//Hide header stuff if slin activated
+		$slin_option_true = get_theme_mod('slin_activation', false);
+		if($slin_option_true){
+			$css = '.site-header .site-branding, .site-header .site-logo-anchor, .site-header .site-logo-link{display:none;}'
+			  . '.woocommerce-active .site-header .main-navigation{'
+			  . 'width:100%;text-align:center;'
+			  . '}'
+			  . '.slin-logo-menu-item img{'
+			  . 'display: block; position: absolute; top: -999%; bottom: -999%; left: -999%; right: -999%; margin: auto;max-height:160px;'
+			  . '}'
+			  . '.slin-logo-menu-item span{'
+			  . 'font-size:2em;'
+			  . '}'
+			  . '.main-navigation ul.nav-menu > .slin-logo-menu-item.slin-logo-text a{'
+			  . '  padding: 0 1em; display: block; margin: -16px 0 0 0;'
+			  . '}'
+			  . '.slin-logo-menu-item.slin-logo-image{'
+			  . 'width:20%;font-size:0;'
+			  . '}';
+		}
 
 		wp_add_inline_style( 'slin-styles', $css );
 	}
@@ -283,7 +321,33 @@ final class SFX_Logo_Inside_Nav {
 		return $classes;
 	}
 
-	function slin_logo_in_nav( $items ){
+	function slin_logo_in_nav( $items, $args ){
+		$slin_option_true = get_theme_mod('slin_activation', false);
+		$li_class = 'slin-logo-text';
+		if(!$slin_option_true)			return $items;
+
+		$logoHTML = '<a href="' . esc_url( home_url( '/' ) ) . '" rel="home"><span>' . get_bloginfo( 'name' ) . '</span></a>';
+		//From storefront-site-logo
+		$check = get_theme_mod( 'woa_sf_enable_logo', 'title_tagline' );
+		$logo = get_theme_mod( 'woa_sf_logo', null );
+
+		if( ( $check == 'logo_img' ) && $logo ) {
+			if( is_ssl() ) {
+				$logo = str_replace( 'http://', 'https://', $logo );
+			}
+			$li_class = 'slin-logo-image';
+			$logoHTML = ''
+				. '<a class="slin-logo-anchor" href="' . esc_url( home_url( '/' ) ) . '" style="font-size:0px;" rel="home">'
+				. get_bloginfo( 'name' )
+				. '<img src="'. $logo. '">'
+				. '</a>'
+			  . '';
+		}
+		else if ( function_exists( 'jetpack_has_site_logo' ) && jetpack_has_site_logo() ) {
+			jetpack_the_site_logo();
+		}
+		
+		if($args->theme_location != 'primary')return $items;
 		//Init return value
 		$html = '';
 		//Convert items html into SimpleXML Object
@@ -298,7 +362,7 @@ final class SFX_Logo_Inside_Nav {
 			//If logo not done and $i > half the number of items
 			if( !$logo_done && $i > ($num_items/2)){
 				//Attach logo
-				$html .= '<li><a href="' . esc_url( home_url( '/' ) ) . '" rel="home">' . get_bloginfo( 'name' ) . '</a></li>';
+				$html .= '<li class=" ' . $li_class . ' slin-logo-menu-item">'.$logoHTML.'</li>';
 				//Set logo done to true
 				$logo_done = TRUE;
 			};
