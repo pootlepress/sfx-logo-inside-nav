@@ -287,7 +287,7 @@ final class SFX_Logo_Inside_Nav {
 			  .'.woocommerce-active .site-header .main-navigation, .site-header .main-navigation{'
 					.'width:100%;text-align:center;'
 			  .'}'
-			  .'.woocommerce-active .site-header .secondary-navigation{'
+			  .'.woocommerce-active.sfx-logo-inside-nav-active .site-header .secondary-navigation{'
 					.'width: 73.87%;'
 			  .'}'
 			  .'.slin-logo-menu-item img{'
