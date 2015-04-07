@@ -217,10 +217,6 @@ final class SFX_Logo_Inside_Nav {
 
 			//Stuff that works
 			add_filter('wp_nav_menu_items', array( $this, 'slin_logo_in_nav' ), 10, 2 );
-			$slin_option_true = get_theme_mod('slin_activation', false);
-			if($slin_option_true){
-				remove_action( 'storefront_header', 'storefront_site_branding' , 20 );
-			}
 
 
 			// Hide the 'More' section in the customizer
@@ -280,27 +276,28 @@ final class SFX_Logo_Inside_Nav {
 		//Hide header stuff if slin activated
 		$slin_option_true = get_theme_mod('slin_activation', false);
 		if($slin_option_true){
-			$css = ''
-			  .'.site-header .site-branding, .site-header .site-logo-anchor, .site-header .site-logo-link{'
-					.'display:none;'
-			  .'}'
-			  .'.woocommerce-active .site-header .main-navigation, .site-header .main-navigation{'
-					.'width:100%;text-align:center;'
-			  .'}'
-			  .'.woocommerce-active.sfx-logo-inside-nav-active .site-header .secondary-navigation{'
-					.'width: 73.87%;'
-			  .'}'
-			  .'.slin-logo-menu-item img{'
-					.'display: block; position: absolute; top: -999%; bottom: -999%; left: -999%; right: -999%; margin: auto;max-height:160px;'
-			  .'}'
-			  .'.slin-logo-menu-item span{'
-					.'font-size:2em;'
-			  .'}'
-			  .'.main-navigation ul.nav-menu > .slin-logo-menu-item.slin-logo-text a{'
-					.'  padding: 0 1em; display: block; margin: -16px 0 0 0;'
-			  .'}'
-			  .'.slin-logo-menu-item.slin-logo-image{'
-					.'width:20%;font-size:0;'
+			$css = '@media screen and (min-width: 768px) {'
+				.'.site-header .site-branding, .site-header .site-logo-anchor, .site-header .site-logo-link{'
+					  .'display:none;'
+				.'}'
+				.'.woocommerce-active .site-header .main-navigation, .site-header .main-navigation{'
+					  .'width:100%;text-align:center;'
+				.'}'
+				.'.woocommerce-active.sfx-logo-inside-nav-active .site-header .secondary-navigation{'
+					  .'width: 73.87%;'
+				.'}'
+				.'.slin-logo-menu-item img{'
+					  .'display: block; position: absolute; top: -999%; bottom: -999%; left: -999%; right: -999%; margin: auto;max-height:160px;'
+				.'}'
+				.'.slin-logo-menu-item span{'
+					  .'font-size:2em;'
+				.'}'
+				.'.main-navigation ul.nav-menu > .slin-logo-menu-item.slin-logo-text a{'
+					  .'  padding: 0 1em; display: block; margin: -16px 0 0 0;'
+				.'}'
+				.'.slin-logo-menu-item.slin-logo-image{'
+					  .'width:20%;font-size:0;'
+				.'}'
 			  .'}';
 		}
 
